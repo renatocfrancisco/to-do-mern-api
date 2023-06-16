@@ -7,6 +7,11 @@
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=flat&logo=express&logoColor=%2361DAFB)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=flat&logo=node.js&logoColor=white)
 
+`npm i` to install dependencies
+`npm start` to start the server
+`npm run dev` to start the server with [nodemon](https://nodemon.io/)
+`npm run format` to format the code using [standard-js](https://standardjs.com/)
+
 <details>
 <summary>mongodb</summary>
 
@@ -23,7 +28,6 @@
 
 ```json
 {
-  //user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   "task": "String",
   "description": "String",
   "priority": "String",
