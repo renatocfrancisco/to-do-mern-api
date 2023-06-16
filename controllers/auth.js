@@ -11,7 +11,7 @@ class AuthController {
     }
 
     const foundUser = await User.findOne({ username })
-    const validPass = await bcrypt.compare(password, foundUser.password)
+    const validPass = foundUser ? await bcrypt.compare(password, foundUser.password) : false
     if (!foundUser || !validPass) {
       return res.status(400).json('Invalid login credentials')
     }
