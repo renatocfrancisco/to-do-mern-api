@@ -3,6 +3,7 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const compression = require('compression')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const { db } = require('./config/db')
 
 const routes = require('./routes/index')
@@ -19,8 +20,8 @@ db.on('disconnected', () => {
 
 const app = express()
 
-app.use(helmet(), compression(), morgan('dev'), express.json())
-app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true })) // Parse JSON bodies / Parse URL-encoded bodies
+app.use(cors(), helmet(), compression(), morgan('dev'), express.json())
+app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (_req, res) => {
   res.send('Hello World! This is the root route of to-do-mern-api')
