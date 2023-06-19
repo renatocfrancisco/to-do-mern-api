@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const helmet = require('helmet')
 const morgan = require('morgan')
@@ -5,6 +6,7 @@ const compression = require('compression')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const { db } = require('./config/db')
+const session = require('express-session')
 
 const routes = require('./routes/index')
 const user = require('./routes/user')
@@ -22,6 +24,11 @@ const app = express()
 
 app.use(helmet(), cors(), compression(), morgan('dev'), express.json())
 app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true }))
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}))
 
 app.get('/', (_req, res) => {
   res.send('Hello World! This is the root route of to-do-mern-api')

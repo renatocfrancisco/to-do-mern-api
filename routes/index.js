@@ -1,5 +1,5 @@
 const rateLimit = require('express-rate-limit')
-const { login, refresh, logout } = require('../controllers/auth')
+const { login, refresh, logout, auth } = require('../controllers/auth')
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -12,6 +12,7 @@ const limiter = rateLimit({
 const routes = (app) => {
   app.use(limiter)
   app.post('/login', login)
+  app.get('/auth', auth)
   app.get('/refresh', refresh)
   app.get('/logout', logout)
 }
