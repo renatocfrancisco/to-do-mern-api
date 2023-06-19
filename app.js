@@ -20,7 +20,7 @@ db.on('disconnected', () => {
 
 const app = express()
 
-app.use(cors(), helmet(), compression(), morgan('dev'), express.json())
+app.use(helmet(), cors(), compression(), morgan('dev'), express.json())
 app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (_req, res) => {
