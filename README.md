@@ -13,14 +13,15 @@
 `npm run format` to format the code using [standard-js](https://standardjs.com/) <br>
 
 <details>
-<summary>mongodb</summary>
+<summary>models</summary>
 
 ### user
 
 ```json
 {
-  "username": "string",
-  "password": "string"
+  "username": "String",
+  "password": "String",
+  "admin": Boolean
 }
 ```
 
@@ -28,6 +29,7 @@
 
 ```json
 {
+  "user": ObjectId,
   "task": "String",
   "description": "String",
   "priority": "String",
