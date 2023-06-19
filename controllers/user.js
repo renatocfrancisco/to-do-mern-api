@@ -49,14 +49,16 @@ class UserController {
       )
   }
 
-  static updateUser = (req, res) => {
-    if (!req.body.username || !req.body.password || !req.body.admin) {
+  static updateUser = async (req, res) => {
+    if (!req.body.username || !req.body.password || !(typeof req.body.admin === 'boolean')) {
       return res.status(400).json('Please enter all fields required to update a user')
     }
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(req.body.password, salt)
     User.findById(req.params.id)
       .then(user => {
         user.username = req.body.username
-        user.password = req.body.password
+        user.password = hash
         user.admin = req.body.admin
         user.save()
           .then(() => res.json('User updated!'))

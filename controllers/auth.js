@@ -24,8 +24,6 @@ class AuthController {
   }
 
   static refresh = async (req, res) => {
-    console.log(req.cookies)
-    console.log(req.headers.cookie)
     const refreshToken = req.headers.cookie.split('=')[1]
     if (!refreshToken) {
       return res.status(401).json({ msg: 'User not logged in' })
