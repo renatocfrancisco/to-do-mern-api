@@ -1,38 +1,28 @@
 const Task = require('../models/task')
-const User = require('../models/user')
 
 class TaskController {
   static createTask = async (req, res) => {
-    const { task, description, priority, status } = req.body
-    if (!task || !description) {
+    const { task, description, priority } = req.body
+    if (!task) {
       return res.status(400).json('Please enter all fields required to create a task')
     }
     if (priority) {
-      if (!checkPriority(priority)) {
-        return res.status(400).json('Status must be either: Pending, In Progress, Completed, On Hold, Cancelled')
-      }
-    }
-
-    if (status) {
-      if (!checkStatus(status)) {
+      if (!checkStatus(priority)) {
         return res.status(400).json('Priority must be either: Low, Medium, High, Urgent, Critical')
       }
     }
 
-    const foundUser = await User.findOne({})
-
-    if (!foundUser._id) {
-      return res.status(400).json('User ID does not exist')
+    const data = {
+      user: req.user._id,
+      task,
+      description: description || '',
+      priority: priority || 'Low',
     }
 
-    const newTask = new Task({
-      user: foundUser._id,
-      task,
-      description
-    })
+    const newTask = new Task(data)
 
     newTask.save()
-      .then(() => res.status(201).json({ msg: 'Task added!' }))
+      .then(() => res.status(201).json('Task added!'))
       .catch(err => res.status(400).json('Error: ' + err))
   }
 
@@ -47,38 +37,40 @@ class TaskController {
   }
 
   static getTask = async (req, res) => {
-    Task.findById(req.params.id)
+    Task.find({ _id: req.params.id, user: req.user._id })
       .then(task => res.json(task))
       .catch(err => res.status(400).json('Error: ' + err))
   }
 
   static updateTask = async (req, res) => {
-    if (!req.body.task || !req.body.description) {
+    const { task, description, priority, status } = req.body
+    const taskName = task
+    if (!taskName || !priority || !status) {
       return res.status(400).json('Please enter all fields required to update a task')
     }
 
-    if (!checkPriority(req.body.priority)) {
-      return res.status(400).json('Status must be either: Pending, In Progress, Completed, On Hold, Cancelled')
-    }
-    if (!checkStatus(req.body.status)) {
+    if (!checkPriority(priority)) {
       return res.status(400).json('Priority must be either: Low, Medium, High, Urgent, Critical')
     }
 
-    Task.findById(req.params.id)
-      .then(task => {
-        task.task = req.body.task
-        task.description = req.body.description
-        task.priority = req.body.priority
-        task.status = req.body.status
+    if (!checkStatus(status)) {
+      return res.status(400).json('Status must be either: Pending, In Progress, Completed, On Hold, Cancelled')
+    }
 
-        task.save()
-          .then(() => res.json('Task updated!'))
-          .catch(err => res.status(400).json('Error: ' + err))
-      }).catch(err => res.status(400).json('Error: ' + err))
+    const data = {
+      task: taskName,
+      description: description || '',
+      priority,
+      status
+    }
+
+    Task.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, { $set: data }, { new: true })
+      .then(task => res.json({ msg: 'Task updated!', task }))
+      .catch(err => res.status(400).json('Error: ' + err))
   }
 
   static deleteTask = (req, res) => {
-    Task.findByIdAndDelete(req.params.id)
+    Task.findOneAndDelete({ _id: req.params.id, user: req.user._id })
       .then(() => res.json('Task deleted.'))
       .catch(err => res.status(400).json('Error: ' + err))
   }
