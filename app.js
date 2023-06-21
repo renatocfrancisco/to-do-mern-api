@@ -24,10 +24,11 @@ const app = express()
 
 app.use(helmet(), cors(), compression(), morgan('dev'), express.json())
 app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true }))
+app.disable('x-powered-by')
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true
 }))
 
 app.get('/', (_req, res) => {
