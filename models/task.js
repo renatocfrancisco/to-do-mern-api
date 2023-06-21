@@ -2,8 +2,16 @@ const mongoose = require('mongoose')
 
 const taskSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  task: String,
-  description: String,
+  task: {
+    type: String,
+    maxlength: 100
+  },
+  description: {
+    type: String,
+    default: '',
+    maxlength: 500,
+    required: false
+  },
   priority: {
     type: String,
     enum: ['Low', 'Medium', 'High', 'Urgent', 'Critical'],
