@@ -6,8 +6,9 @@ class TaskController {
     if (!task) {
       return res.status(400).json('Please enter all fields required to create a task')
     }
+
     if (priority) {
-      if (!checkStatus(priority)) {
+      if (!checkPriority(priority)) {
         return res.status(400).json('Priority must be either: Low, Medium, High, Urgent, Critical')
       }
     }
@@ -77,11 +78,11 @@ class TaskController {
 }
 
 function checkPriority (priority) {
-  return !!['Low', 'Medium', 'High', 'Urgent', 'Critical'].includes(priority)
+  return ['Low', 'Medium', 'High', 'Urgent', 'Critical'].includes(priority)
 }
 
 function checkStatus (status) {
-  return !!['Pending', 'In Progress', 'Completed', 'On Hold', 'Cancelled'].includes(status)
+  return ['Pending', 'In Progress', 'Completed', 'On Hold', 'Cancelled'].includes(status)
 }
 
 module.exports = TaskController
