@@ -32,13 +32,12 @@ class TaskController {
     })
 
     newTask.save()
-      .then(() => res.json({ msg: 'Task added!' }))
+      .then(() => res.status(201).json({ msg: 'Task added!' }))
       .catch(err => res.status(400).json('Error: ' + err))
   }
 
   static getTasks = async (req, res) => {
-    const foundUser = await User.findOne({})
-    Task.find({ user: foundUser._id })
+    Task.find({ user: req.user._id })
       .then(tasks =>
         tasks.length === 0
           ? res.status(404).json({ msg: 'No tasks found. Get busy!' })
