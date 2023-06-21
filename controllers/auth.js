@@ -16,22 +16,15 @@ class AuthController {
       return res.status(400).json('Invalid login credentials')
     }
 
-    if (req.session.user) {
-      if (req.session.user === foundUser._id.toString()) {
-        return res.status(400).json('User already logged in')
-      }
-    }
-
     const accessToken = jwt.sign({ _id: foundUser._id, admin: foundUser.admin }, process.env.JWT_SECRET, { expiresIn: '1h' })
     const refreshToken = jwt.sign({ _id: foundUser._id, admin: foundUser.admin }, process.env.JWT_REFRESH_SECRET, { expiresIn: '1d' })
 
-    req.session.user = foundUser._id.toString()
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
     res.json({ accessToken, refreshToken })
   }
 
   static refresh = async (req, res) => {
-    const refreshToken = req.headers.cookie.split(';')[1].split('=')[1]
+    const refreshToken = req.headers.cookie.split('jwt=')[1]
     if (!refreshToken) {
       return res.status(401).json({ msg: 'User not logged in' })
     }
@@ -47,7 +40,6 @@ class AuthController {
 
   static logout = async (_req, res) => {
     res.clearCookie('jwt')
-    res.clearCookie('connect.sid')
     res.json('User logged out')
   }
 }
