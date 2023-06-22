@@ -10,10 +10,9 @@ const limiter = rateLimit({
 })
 
 const routes = (app) => {
-  app.use(limiter)
-  app.post('/login', login)
-  app.get('/refresh', refresh)
-  app.get('/logout', logout)
+  app.post('/login', limiter, login)
+  app.get('/refresh', limiter, refresh)
+  app.get('/logout', limiter, logout)
 }
 
 module.exports = routes

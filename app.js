@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const helmet = require('helmet')
 const morgan = require('morgan')
@@ -15,13 +16,15 @@ db.once('open', () => {
   console.log('Successful MongoDB connection!')
 })
 db.on('disconnected', () => {
-  console.log('MongoDB disconnected!')
+  console.log('MongoDB disconnected! Reconnecting...')
+  db.connect(process.env.MONGO_URI);
 })
 
 const app = express()
 
 app.use(helmet(), cors(), compression(), morgan('dev'), express.json())
 app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true }))
+app.disable('x-powered-by')
 
 app.get('/', (_req, res) => {
   res.send('Hello World! This is the root route of to-do-mern-api')

@@ -24,7 +24,7 @@ class AuthController {
   }
 
   static refresh = async (req, res) => {
-    const refreshToken = req.headers.cookie.split('=')[1]
+    const refreshToken = req.headers.cookie.split('jwt=')[1]
     if (!refreshToken) {
       return res.status(401).json({ msg: 'User not logged in' })
     }
@@ -39,8 +39,8 @@ class AuthController {
   }
 
   static logout = async (_req, res) => {
-    res.cookie('jwt', '', { maxAge: 0 })
-    res.json({ msg: 'User logged out' })
+    res.clearCookie('jwt')
+    res.json('User logged out')
   }
 }
 
