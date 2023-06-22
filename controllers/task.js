@@ -23,7 +23,7 @@ class TaskController {
     const newTask = new Task(data)
 
     newTask.save()
-      .then(() => res.status(201).json('Task added!'))
+      .then(() => res.status(201).json({msg: 'Task added!', task: newTask}))
       .catch(err => res.status(400).json('Error: ' + err))
   }
 
