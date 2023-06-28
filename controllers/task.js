@@ -17,13 +17,13 @@ class TaskController {
       user: req.user._id,
       task,
       description: description || '',
-      priority: priority || 'Low',
+      priority: priority || 'Low'
     }
 
     const newTask = new Task(data)
 
     newTask.save()
-      .then(() => res.status(201).json({msg: 'Task added!', task: newTask}))
+      .then(() => res.status(201).json({ msg: 'Task added!', task: newTask }))
       .catch(err => res.status(400).json('Error: ' + err))
   }
 
@@ -46,27 +46,41 @@ class TaskController {
   static updateTask = async (req, res) => {
     const { task, description, priority, status } = req.body
     const taskName = task
-    if (!taskName || !priority || !status) {
-      return res.status(400).json('Please enter all fields required to update a task')
+    const updateObj = {}
+
+    if (!taskName && !description && !priority && !status) {
+      return res.status(400).json('At least one field is required to update a task')
     }
 
-    if (!checkPriority(priority)) {
-      return res.status(400).json('Priority must be either: Low, Medium, High, Urgent, Critical')
+    if (status) {
+      if (!checkStatus(status)) {
+        return res.status(400).json('Status must be either: Pending, In Progress, Completed, On Hold, Cancelled')
+      }
+      updateObj.status = status
     }
 
-    if (!checkStatus(status)) {
-      return res.status(400).json('Status must be either: Pending, In Progress, Completed, On Hold, Cancelled')
+    if (priority) {
+      if (!checkPriority(priority)) {
+        return res.status(400).json('Priority must be either: Low, Medium, High, Urgent, Critical')
+      }
+      updateObj.priority = priority
     }
 
-    const data = {
-      task: taskName,
-      description: description || '',
-      priority,
-      status
+    if (description) {
+      updateObj.description = description
     }
 
-    Task.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, { $set: data }, { new: true })
-      .then(task => res.json({ msg: 'Task updated!', task }))
+    if (task) {
+      updateObj.task = task
+    }
+
+    Task.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, { $set: updateObj }, { new: true })
+      .then(task => {
+        if (!task) {
+          return res.status(404).json('Task not found')
+        }
+        res.status(200).json({ msg: 'Task updated!', task })
+      })
       .catch(err => res.status(400).json('Error: ' + err))
   }
 
