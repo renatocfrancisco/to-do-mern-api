@@ -17,7 +17,7 @@ db.once('open', () => {
 })
 db.on('disconnected', () => {
   console.log('MongoDB disconnected! Reconnecting...')
-  db.connect(process.env.MONGO_URI);
+  db.connect(process.env.MONGO_URI)
 })
 
 const app = express()
