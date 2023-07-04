@@ -24,9 +24,9 @@ class AuthController {
   }
 
   static refresh = async (req, res) => {
-    const refreshToken = req.headers.cookie.split('jwt=')[1]
+    const refreshToken = getRefreshToken();
     if (!refreshToken) {
-      return res.status(401).json({ msg: 'User not logged in' })
+      return res.status(400).json({ msg: 'User not logged in' })
     }
 
     try {
@@ -35,6 +35,22 @@ class AuthController {
       res.json({ accessToken })
     } catch (err) {
       res.status(400).json({ msg: 'Invalid token' })
+    }
+
+    function getRefreshToken() {
+      if(!req.headers.cookie) {
+        if(!req.headers.cookies){
+          return null
+        }else{
+          return req.headers.cookies.split('jwt=')[1].split(';')[0].trim()
+        }
+      }else{
+        const cookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('jwt='))
+        if (!cookie) {
+          return null
+        }
+        return cookie.split('=')[1]
+      }
     }
   }
 
