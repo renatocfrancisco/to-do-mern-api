@@ -2,7 +2,7 @@ const Task = require('../models/task')
 
 class TaskController {
   static createTask = async (req, res) => {
-    const { task, description, priority } = req.body
+    const { task, priority } = req.body
     if (!task) {
       return res.status(400).json('Please enter all fields required to create a task')
     }
@@ -16,7 +16,6 @@ class TaskController {
     const data = {
       user: req.user._id,
       task,
-      description: description || '',
       priority: priority || 'Low'
     }
 
@@ -44,11 +43,11 @@ class TaskController {
   }
 
   static updateTask = async (req, res) => {
-    const { task, description, priority, status } = req.body
+    const { task, priority, status } = req.body
     const taskName = task
     const updateObj = {}
 
-    if (!taskName && !description && !priority && !status) {
+    if (!taskName && !priority && !status) {
       return res.status(400).json('At least one field is required to update a task')
     }
 
@@ -64,10 +63,6 @@ class TaskController {
         return res.status(400).json('Priority must be either: Low, Medium, High, Urgent, Critical')
       }
       updateObj.priority = priority
-    }
-
-    if (description) {
-      updateObj.description = description
     }
 
     if (task) {

@@ -6,12 +6,6 @@ const taskSchema = new mongoose.Schema({
     type: String,
     maxlength: 100
   },
-  description: {
-    type: String,
-    default: '',
-    maxlength: 500,
-    required: false
-  },
   priority: {
     type: String,
     enum: ['Low', 'Medium', 'High', 'Urgent', 'Critical'],

@@ -31,7 +31,6 @@
 {
   "user": ObjectId,
   "task": "String",
-  "description": "String",
   "priority": "String",
   "status": "String"
 }
