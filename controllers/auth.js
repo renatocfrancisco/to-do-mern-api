@@ -10,7 +10,7 @@ class AuthController {
       return res.status(400).json('Please enter all fields required to login')
     }
 
-    const foundUser = await User.findOne({ username: {$eq: username} })
+    const foundUser = await User.findOne({ username: { $eq: username } })
     const validPass = foundUser ? await bcrypt.compare(password, foundUser.password) : false
     if (!foundUser || !validPass) {
       return res.status(400).json('Invalid login credentials')
@@ -24,7 +24,7 @@ class AuthController {
   }
 
   static refresh = async (req, res) => {
-    const refreshToken = getRefreshToken();
+    const refreshToken = getRefreshToken()
     if (!refreshToken) {
       return res.status(400).json({ msg: 'User not logged in' })
     }
@@ -37,14 +37,14 @@ class AuthController {
       res.status(400).json({ msg: 'Invalid token' })
     }
 
-    function getRefreshToken() {
-      if(!req.headers.cookie) {
-        if(!req.headers.cookies){
+    function getRefreshToken () {
+      if (!req.headers.cookie) {
+        if (!req.headers.cookies) {
           return null
-        }else{
+        } else {
           return req.headers.cookies.split('jwt=')[1].split(';')[0].trim()
         }
-      }else{
+      } else {
         const cookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('jwt='))
         if (!cookie) {
           return null

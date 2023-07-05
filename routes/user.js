@@ -5,10 +5,10 @@ const UserController = require('../controllers/user')
 const rateLimit = require('express-rate-limit')
 
 const limiter = rateLimit({
-    windowMs: 1*60*1000,
-    max: 50,
-    message: 'Max requests reached. Please try again later.'
-});
+  windowMs: 1 * 60 * 1000,
+  max: 50,
+  message: 'Max requests reached. Please try again later.'
+})
 
 router.use(limiter)
 
