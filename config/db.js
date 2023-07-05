@@ -1,8 +1,24 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 
-mongoose.connect(process.env.MONGO_URI)
+const connect = () => {
+  mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000
+  })
+    .then(() => console.log('Successful MongoDB connection!'))
+    .catch((err) => {
+      console.log('MongoDB connection error: ', err)
+      setTimeout(connect, 5000)
+    })
+}
 
-const db = mongoose.connection
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected! Reconnecting...')
+  setTimeout(connect, 5000)
+})
 
-module.exports = { db }
+connect()
+
+module.exports = { db: mongoose.connection }

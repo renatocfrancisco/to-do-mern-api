@@ -11,15 +11,6 @@ const routes = require('./routes/index')
 const user = require('./routes/user')
 const task = require('./routes/task')
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
-db.once('open', () => {
-  console.log('Successful MongoDB connection!')
-})
-db.on('disconnected', () => {
-  console.log('MongoDB disconnected! Reconnecting...')
-  db.connect(process.env.MONGO_URI)
-})
-
 const app = express()
 
 app.use(helmet(), cors(), compression(), morgan('dev'), express.json())
