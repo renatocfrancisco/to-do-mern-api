@@ -27,7 +27,7 @@ class TaskController {
   }
 
   static getTasks = async (req, res) => {
-    Task.find({ user: req.user._id })
+    Task.find({ user: {$eq: req.user._id} })
       .then(tasks =>
         tasks.length === 0
           ? res.status(404).json({ msg: 'No tasks found. Get busy!' })
@@ -37,7 +37,7 @@ class TaskController {
   }
 
   static getTask = async (req, res) => {
-    Task.find({ _id: req.params.id, user: req.user._id })
+    Task.find({ _id: {$eq: req.params.id}, user: {$eq: req.user._id} })
       .then(task => res.json(task))
       .catch(err => res.status(400).json('Error: ' + err))
   }
@@ -69,7 +69,7 @@ class TaskController {
       updateObj.task = task
     }
 
-    Task.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, { $set: updateObj }, { new: true })
+    Task.findOneAndUpdate({ _id: {$eq: req.params.id}, user: {$eq: req.user._id} }, { $set: updateObj }, { new: true })
       .then(task => {
         if (!task) {
           return res.status(404).json('Task not found')
@@ -80,7 +80,7 @@ class TaskController {
   }
 
   static deleteTask = (req, res) => {
-    Task.findOneAndDelete({ _id: req.params.id, user: req.user._id })
+    Task.findOneAndDelete({ _id: {$eq: req.params.id}, user: {$eq: req.user._id} })
       .then(() => res.json('Task deleted.'))
       .catch(err => res.status(400).json('Error: ' + err))
   }

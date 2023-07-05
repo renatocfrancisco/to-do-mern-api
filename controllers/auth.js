@@ -10,7 +10,7 @@ class AuthController {
       return res.status(400).json('Please enter all fields required to login')
     }
 
-    const foundUser = await User.findOne({ username })
+    const foundUser = await User.findOne({ username: {$eq: username} })
     const validPass = foundUser ? await bcrypt.compare(password, foundUser.password) : false
     if (!foundUser || !validPass) {
       return res.status(400).json('Invalid login credentials')
