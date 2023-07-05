@@ -9,7 +9,7 @@ const limiter = rateLimit({
   message: 'Max requests reached. Please try again later.'
 })
 
-router.use(jwt, limiter)
+router.use(limiter, jwt)
 
 router.get('/', TaskController.getTasks)
 router.get('/:id', TaskController.getTask)
