@@ -19,7 +19,15 @@ class UserController {
     })
     newUser.save()
       .then(() => res.json({ msg: 'User added!' }))
-      .catch(err => res.status(400).json('Error: ' + err))
+      .catch(err => {
+        if (err.code === 11000) {
+          return res.status(400).json({ msg: 'Username already exists', error: 'Error: ' + err })
+        } else if (err.name === 'ValidationError') {
+          const msg = Object.values(err.errors).map(val => val.message).join(', ')
+          return res.status(400).json({ msg, error: 'Error: ' + err })
+        }
+        return res.status(400).json('Error: ' + err)
+      })
   }
 
   static getUsers = (_req, res) => {
