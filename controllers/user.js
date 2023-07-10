@@ -5,7 +5,7 @@ const User = require('../models/user')
 class UserController {
   static createUser = async (req, res) => {
     const { username, password } = req.body
-    if (!username || !password) {
+    if (!username || !password || typeof username !== 'string' || typeof password !== 'string') {
       return res.status(400).json('Please enter all fields required to create a user')
     }
 
@@ -53,21 +53,26 @@ class UserController {
     const { username, password, admin } = req.body
     const updateUser = {}
 
-    if (username) {
+    if (!username && !password && !admin) {
+      return res.status(400).json('At least one field is required to update a user')
+    }
+
+    if (username && typeof username === 'string') {
       updateUser.username = username
     }
 
-    if (password) {
+    if (password && typeof password === 'string') {
       const salt = await bcrypt.genSalt(10)
       const hash = await bcrypt.hash(password, salt)
       updateUser.password = hash
     }
 
-    if (admin) {
-      if (typeof admin !== 'boolean') {
-        return res.status(400).json('Admin must be a boolean')
-      }
+    if (admin && typeof admin === 'boolean') {
       updateUser.admin = admin
+    }
+
+    if (updateUser === {}) {
+      return res.status(400).json('No valid fields to update')
     }
 
     User.findByIdAndUpdate(req.params.id, updateUser, { new: true })

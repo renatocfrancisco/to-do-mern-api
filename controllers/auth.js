@@ -6,7 +6,7 @@ const User = require('../models/user')
 class AuthController {
   static login = async (req, res) => {
     const { username, password } = req.body
-    if (!username || !password) {
+    if (!username || !password || typeof username !== 'string' || typeof password !== 'string') {
       return res.status(400).json('Please enter all fields required to login')
     }
 
