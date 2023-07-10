@@ -1,6 +1,6 @@
 {
   "name": "to-do-mern-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Express API for to-do-mern-app",
   "main": "index.js",
   "scripts": {
