@@ -50,21 +50,40 @@ class UserController {
   }
 
   static updateUser = async (req, res) => {
-    if (!req.body.username || !req.body.password || !(typeof req.body.admin === 'boolean')) {
-      return res.status(400).json('Please enter all fields required to update a user')
+    const { username, password, admin } = req.body
+    const updateUser = {}
+
+    if (username) {
+      updateUser.username = username
     }
-    const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(req.body.password, salt)
-    User.findById(req.params.id)
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10)
+      const hash = await bcrypt.hash(password, salt)
+      updateUser.password = hash
+    }
+
+    if (admin) {
+      if (typeof admin !== 'boolean') {
+        return res.status(400).json('Admin must be a boolean')
+      }
+      updateUser.admin = admin
+    }
+
+    User.findByIdAndUpdate(req.params.id, updateUser, { new: true })
       .then(user => {
-        user.username = req.body.username
-        user.password = hash
-        user.admin = req.body.admin
-        user.save()
-          .then(() => res.json('User updated!'))
-          .catch(err => res.status(400).json('Error: ' + err))
+        if (!user) {
+          return res.status(404).json({ msg: 'User not found' })
+        }
+        return res.json({ msg: 'User updated!', user })
       })
-      .catch(err => res.status(400).json('Error: ' + err))
+      .catch(err => {
+        if (err.kind === 'ObjectId') {
+          return res.status(400).json({ msg: 'User ID invalid', error: 'Error: ' + err })
+        }
+        return res.status(400).json('Error: ' + err)
+      }
+      )
   }
 
   static deleteUser = (req, res) => {
