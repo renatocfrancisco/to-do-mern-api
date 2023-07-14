@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
 })
 
 async function login (user = env.parsed.TEST_USER_ADMIN, pwd = env.parsed.TEST_PWD_ADMIN) {
+  await new Promise((resolve) => setTimeout(resolve, 1000))
   const data = JSON.stringify({
     username: user,
     password: pwd
@@ -25,7 +26,7 @@ async function login (user = env.parsed.TEST_USER_ADMIN, pwd = env.parsed.TEST_P
     return response.data
   }
   ).catch((error) => {
-    if(error.response){
+    if (error.response) {
       throw new Error(error.response.data.message)
     }
     throw new Error('Login failed: ', error)
@@ -45,7 +46,6 @@ async function logout () {
   }
 
   await axiosInstance(config).then((_response) => {
-    console.log('logout ok')
     axiosInstance.defaults.headers.common.Authorization = ''
   }
   ).catch((error) => {
@@ -56,10 +56,10 @@ async function logout () {
 async function request (method, url, data = null, token = null, refresh = null) {
   const methods = ['get', 'post', 'put', 'delete']
   if (methods.indexOf(method) === -1) throw new Error('Invalid method')
-  if(token){
+  if (token) {
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`
   }
-  if(refresh){
+  if (refresh) {
     axiosInstance.defaults.headers.cookies = `jwt=${refresh}`
   }
   const config = {
@@ -69,15 +69,15 @@ async function request (method, url, data = null, token = null, refresh = null) 
       'Content-Type': 'application/json'
     }
   }
-  if(data){
+  if (data) {
     config.data = data
   }
 
   const response = await axiosInstance(config).then((response) => {
-    if(url === '/refresh'){
+    if (url === '/refresh') {
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`
     }
-    if(url === '/logout'){
+    if (url === '/logout') {
       axiosInstance.defaults.headers.common.Authorization = ''
     }
     return response

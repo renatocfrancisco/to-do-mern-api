@@ -1,7 +1,7 @@
 const { request } = require('./axiosInstance')
 const env = require('dotenv').config()
-var token = null
-var refresh = null
+let token = null
+let refresh = null
 
 describe('auth', () => {
   describe('login', () => {
@@ -20,7 +20,7 @@ describe('auth', () => {
 
   describe('refresh', () => {
     it('should return a new access token', async () => {
-      if(!token) throw new Error('No token defined in login')
+      if (!token) throw new Error('No token defined in login')
       const response = await request('get', '/refresh', null, token, refresh)
       expect(response.data).toHaveProperty('accessToken')
     })

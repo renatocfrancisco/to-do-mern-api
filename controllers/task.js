@@ -86,7 +86,7 @@ class TaskController {
     Task.findOneAndDelete({ _id: { $eq: req.params.id }, user: { $eq: req.user._id } })
       .then(() => res.json('Task deleted.'))
       .catch(err => {
-        if(err.name === 'CastError') return res.status(400).json('Invalid ID Error: ' + err)
+        if (err.name === 'CastError') return res.status(400).json('Invalid ID Error: ' + err)
         res.status(400).json('Error: ' + err)
       })
   }
