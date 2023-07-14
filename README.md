@@ -13,6 +13,7 @@
 `npm run dev` to start the server with [nodemon](https://nodemon.io/) <br>
 `npm run format` to format the code using [standard-js](https://standardjs.com/) <br>
 `npm run test` to run the tests using [jest](https://jestjs.io/) and [axios](https://axios-http.com/) <br>
+Need to create a `.env` file for the test and secret environment variables. <br>
 
 <details>
 <summary>models</summary>
