@@ -18,7 +18,7 @@ class UserController {
       admin: false
     })
     newUser.save()
-      .then(() => res.json({ msg: 'User added!' }))
+      .then(() => res.status(201).json({ msg: 'User added!', user: newUser }))
       .catch(err => {
         if (err.code === 11000) {
           return res.status(400).json({ msg: 'Username already exists', error: 'Error: ' + err })
