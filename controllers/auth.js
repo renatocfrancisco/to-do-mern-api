@@ -56,7 +56,7 @@ class AuthController {
 
   static logout = async (_req, res) => {
     res.clearCookie('jwt')
-    res.json('User logged out')
+    res.status(204).json('User logged out')
   }
 }
 
