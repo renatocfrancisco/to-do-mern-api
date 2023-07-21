@@ -22,7 +22,7 @@ app.get('/', (_req, res) => {
 })
 
 routes(app)
-app.use('/user', user)
-app.use('/task', task)
+app.use('/users', user)
+app.use('/tasks', task)
 
 module.exports = app

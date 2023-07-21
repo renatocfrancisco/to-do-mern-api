@@ -14,7 +14,7 @@ describe('task', () => {
 
   describe('get 404', () => {
     it('should not return a list of tasks', async () => {
-      const response = await request('get', '/task')
+      const response = await request('get', '/tasks')
       expect(response.status).toBe(404)
     })
   })
@@ -25,7 +25,7 @@ describe('task', () => {
         task: 'test task',
         priority: 'Medium'
       })
-      const response = await request('post', '/task', data)
+      const response = await request('post', '/tasks', data)
       expect(response.status).toBe(201)
       expect(response.data.task).toHaveProperty('_id')
       expect(response.data.task).toHaveProperty('task', 'test task')
@@ -38,7 +38,7 @@ describe('task', () => {
       const data = JSON.stringify({
         task: 'test task 2'
       })
-      const response = await request('post', '/task', data)
+      const response = await request('post', '/tasks', data)
       expect(response.status).toBe(201)
       expect(response.data.task).toHaveProperty('_id')
       expect(response.data.task).toHaveProperty('task', 'test task 2')
@@ -51,7 +51,7 @@ describe('task', () => {
       const data = JSON.stringify({
         priority: 'Medium'
       })
-      const response = await request('post', '/task', data)
+      const response = await request('post', '/tasks', data)
       expect(response.status).toBe(400)
     })
 
@@ -60,7 +60,7 @@ describe('task', () => {
         task: 'test task 3',
         priority: 'invalid'
       })
-      const response = await request('post', '/task', data)
+      const response = await request('post', '/tasks', data)
       expect(response.status).toBe(400)
     })
 
@@ -68,14 +68,14 @@ describe('task', () => {
       const data = JSON.stringify({
         task: 'test task 4'.repeat(20)
       })
-      const response = await request('post', '/task', data)
+      const response = await request('post', '/tasks', data)
       expect(response.status).toBe(400)
     })
   })
 
   describe('get 200', () => {
     it('should return a list of tasks', async () => {
-      const response = await request('get', '/task')
+      const response = await request('get', '/tasks')
       expect(response.status).toBe(200)
       expect(response.data).toBeInstanceOf(Array)
     })
@@ -89,7 +89,7 @@ describe('task', () => {
         priority: 'High',
         status: 'On Hold'
       })
-      const response = await request('put', `/task/${taskIds[0]}`, data)
+      const response = await request('put', `/tasks/${taskIds[0]}`, data)
       expect(response.status).toBe(200)
       expect(response.data.task).toHaveProperty('_id')
       expect(response.data.task).toHaveProperty('task', 'test task updated')
@@ -101,7 +101,7 @@ describe('task', () => {
       const data = JSON.stringify({
         priority: 'Low'
       })
-      const response = await request('put', `/task/${taskIds[0]}`, data)
+      const response = await request('put', `/tasks/${taskIds[0]}`, data)
       expect(response.status).toBe(200)
       expect(response.data.task).toHaveProperty('_id')
       expect(response.data.task).toHaveProperty('task', 'test task updated')
@@ -114,13 +114,13 @@ describe('task', () => {
     it('should delete a task', async () => {
       if (taskIds === []) throw new Error('taskIds is empty')
       for (let i = 0; i < taskIds.length; i++) {
-        const response = await request('delete', `/task/${taskIds[i]}`)
+        const response = await request('delete', `/tasks/${taskIds[i]}`)
         expect(response.status).toBe(200)
       }
     })
 
     it('should not delete a task with invalid id', async () => {
-      const response = await request('delete', '/task/invalid')
+      const response = await request('delete', '/tasks/invalid')
       expect(response.status).toBe(400)
     })
   })

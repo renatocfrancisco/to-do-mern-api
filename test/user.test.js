@@ -12,7 +12,7 @@ describe('user', () => {
 
   describe('get', () => {
     it('should return a list of users', async () => {
-      const response = await request('get', '/user')
+      const response = await request('get', '/users')
       expect(response.status).toBe(200)
       expect(response.data).toBeInstanceOf(Array)
     })
@@ -24,7 +24,7 @@ describe('user', () => {
         username: 'test user to delete',
         password: 'test pwd'
       })
-      const response = await request('post', '/user', data)
+      const response = await request('post', '/users', data)
       expect(response.status).toBe(201)
       expect(response.data.user).toHaveProperty('_id')
       expect(response.data.user).toHaveProperty('username', 'test user to delete')
@@ -35,13 +35,13 @@ describe('user', () => {
       const data = JSON.stringify({
         password: 'test pwd'
       })
-      const response = await request('post', '/user', data)
+      const response = await request('post', '/users', data)
       expect(response.status).toBe(400)
 
       const data2 = JSON.stringify({
         username: 'test user'
       })
-      const response2 = await request('post', '/user', data2)
+      const response2 = await request('post', '/users', data2)
       expect(response2.status).toBe(400)
     })
 
@@ -50,7 +50,7 @@ describe('user', () => {
         username: 'renato',
         password: 'pwd'
       })
-      const response = await request('post', '/user', data)
+      const response = await request('post', '/users', data)
       expect(response.status).toBe(400)
     })
 
@@ -59,13 +59,13 @@ describe('user', () => {
         username: 'te',
         password: 'pwd'
       })
-      const response = await request('post', '/user', data)
+      const response = await request('post', '/users', data)
       expect(response.status).toBe(400)
       const data2 = JSON.stringify({
         username: 'test user with more than 20 characters',
         password: 'pwd'
       })
-      const response2 = await request('post', '/user', data2)
+      const response2 = await request('post', '/users', data2)
       expect(response2.status).toBe(400)
     })
   })
@@ -73,13 +73,13 @@ describe('user', () => {
   describe('get by id', () => {
     it('should return a user', async () => {
       if (!userId) throw new Error('userId not defined')
-      const response = await request('get', `/user/${userId}`)
+      const response = await request('get', `/users/${userId}`)
       expect(response.status).toBe(200)
       expect(response.data).toHaveProperty('_id', userId)
     })
 
     it('should return a 400 status with invalid id', async () => {
-      const response = await request('get', '/user/invalid')
+      const response = await request('get', '/users/invalid')
       expect(response.status).toBe(400)
     })
   })
@@ -90,7 +90,7 @@ describe('user', () => {
         username: 'test user updated',
         password: 'test pwd'
       })
-      const response = await request('put', `/user/${userId}`, data)
+      const response = await request('put', `/users/${userId}`, data)
       expect(response.status).toBe(200)
       expect(response.data.user).toHaveProperty('username', 'test user updated')
     })
@@ -99,7 +99,7 @@ describe('user', () => {
       const data = JSON.stringify({
         username: 'test user to delete updated again'
       })
-      const response = await request('put', `/user/${userId}`, data)
+      const response = await request('put', `/users/${userId}`, data)
       expect(response.status).toBe(200)
       expect(response.data.user).toHaveProperty('username', 'test user to delete updated again')
     })
@@ -107,12 +107,12 @@ describe('user', () => {
 
   describe('delete by id', () => {
     it('should delete a user', async () => {
-      const response = await request('delete', `/user/${userId}`)
+      const response = await request('delete', `/users/${userId}`)
       expect(response.status).toBe(200)
     })
 
     it('should return a 400 status with invalid id', async () => {
-      const response = await request('delete', '/user/invalid')
+      const response = await request('delete', '/users/invalid')
       expect(response.status).toBe(400)
     })
   })
