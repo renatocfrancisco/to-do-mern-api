@@ -13,6 +13,8 @@
 git clone https://github.com/renatocfrancisco/to-do-mern-api
 ```
 
+## commmands
+
 `npm i` to install dependencies <br>
 `npm start` to start the server <br>
 `npm run dev` to start the server with [nodemon](https://nodemon.io/) <br>
@@ -20,8 +22,7 @@ git clone https://github.com/renatocfrancisco/to-do-mern-api
 `npm run test` to run the tests using [jest](https://jestjs.io/) and [axios](https://axios-http.com/) <br>
 Need to create a `.env` file for the test and secret environment variables. <br>
 
-<details>
-<summary>documents</summary>
+### documents
 
 user
 
