@@ -8,6 +8,11 @@
 [![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/en)
 [![Jest](https://img.shields.io/badge/-Jest-%2399425b?style=flat&logo=jest&logoColor=white)](https://jestjs.io/)
 
+[Download zip file](https://github.com/renatocfrancisco/to-do-mern-api/archive/refs/heads/main.zip), get the [latest release](https://github.com/renatocfrancisco/to-do-mern-api/releases/latest) or execute:
+```
+git clone https://github.com/renatocfrancisco/to-do-mern-api
+```
+
 `npm i` to install dependencies <br>
 `npm start` to start the server <br>
 `npm run dev` to start the server with [nodemon](https://nodemon.io/) <br>
