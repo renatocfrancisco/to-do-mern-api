@@ -15,7 +15,7 @@ Express API for [to-do-mern-app](https://github.com/renatocfrancisco/to-do-mern-
 git clone https://github.com/renatocfrancisco/to-do-mern-api
 ```
 
-## commmands
+## commands
 
 `npm i` to install dependencies <br>
 `npm start` to start the server <br>
